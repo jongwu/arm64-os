@@ -31,10 +31,10 @@
  *
  * THIS HEADER MAY NOT BE EXTRACTED OR MODIFIED IN ANY WAY.
  */
-//#include <uk/arch/limits.h>
-//#include <uk/asm.h>
-//#include <kvm-arm/mm.h>
-//#include <arm/cpu_defs.h>
+#include <limits.h>
+#include <asm.h>
+#include <mm.h>
+#include <cpu_defs.h>
 //#include <sections.h>
 #include <entry.h>
 

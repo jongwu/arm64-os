@@ -32,13 +32,10 @@
  *
  * $FreeBSD$
  */
-/*
-#include <uk/arch/limits.h>
-#include <uk/asm.h>
-#include <kvm-arm/mm.h>
-#include <arm/cpu_defs.h>
-*/
-#include <entry.h>
+#include <limits.h>
+#include <asm.h>
+#include <mm.h>
+#include <cpu_defs.h>
 /*
  * The following is the Memory Layout of AArch64 Virtual Machine
  * | 0 - 0x3FFFFFFF |   0x40000000 - 0x7FFFFFFFFF           |  512GB - 1TB   |

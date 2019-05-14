@@ -31,13 +31,13 @@
  *
  * THIS HEADER MAY NOT BE EXTRACTED OR MODIFIED IN ANY WAY.
  */
-/* #include <uk/arch/limits.h> */
+#include <limits.h>
 
 /* QEMU-AArch64 virt platform's ram base address */
-/* #define RAM_BASE_ADDR 0x40000000 */
+#define RAM_BASE_ADDR 0x40000000
 
 /* Reserve first 1MB for DTB */
-/* #define DTB_RESERVED_SIZE 0x100000 */
+#define DTB_RESERVED_SIZE 0x100000
 
 OUTPUT_FORMAT("elf64-littleaarch64")
 OUTPUT_ARCH(aarch64)
@@ -51,11 +51,11 @@ ENTRY(_libkvmplat_entry)
  * address.
  */
 SECTIONS {
-	. = 0x40000000;
+	. = RAM_BASE_ADDR;
 
 	/* Place DTB binary at the beginning of the RAM */
 	_dtb = .;
-	. = . + 0x100000;
+	. = . + DTB_RESERVED_SIZE;
 
 	/* Code */
 	_text = .;
@@ -65,8 +65,27 @@ SECTIONS {
 		*(.text.*)
 	}
 
+	. = ALIGN(__PAGE_SIZE);
 	_etext = .;
 
+	/* Exception frame */
+	__eh_frame_start = .;
+	.eh_frame :
+	{
+		*(.eh_frame)
+		*(.eh_frame.*)
+	}
+	__eh_frame_end = .;
+
+	/* Exception frame header */
+	__eh_frame_hdr_start = .;
+	.eh_frame_hdr :
+	{
+
+		*(.eh_frame_hdr)
+		*(.eh_frame_hdr.*)
+	}
+	. = ALIGN(__PAGE_SIZE);
 	__eh_frame_hdr_end = .;
 
 	/* Read-only data */
@@ -80,12 +99,32 @@ SECTIONS {
 
 	_erodata = .;
 
+	. = ALIGN(__PAGE_SIZE);
 	uk_ctortab = .;
 	.uk_ctortab :
 	{
 		*(SORT_BY_NAME(.uk_ctortab[0-7]))
 		LONG(0)
 	}
+
+	/* Constructor tables (read-only) */
+	_ctors = .;
+	.preinit_array : {
+		. = ALIGN(0x8);
+		PROVIDE_HIDDEN (__preinit_array_start = .);
+		KEEP (*(.preinit_array))
+		PROVIDE_HIDDEN (__preinit_array_end = .);
+	}
+
+	.init_array : {
+		. = ALIGN(0x8);
+		PROVIDE_HIDDEN (__init_array_start = .);
+		KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
+		KEEP (*(.init_array .ctors))
+		PROVIDE_HIDDEN (__init_array_end = .);
+	}
+	_ectors = .;
+	. = ALIGN(__PAGE_SIZE);
 
 	/* Read-write data that is initialized explicitly in code */
 	_data = .;
@@ -94,6 +133,8 @@ SECTIONS {
 		*(.data)
 		*(.data.*)
 	}
+	_edata = .;
+	. = ALIGN(__PAGE_SIZE);
 
 	__bss_start = .;
 	/* Read-write data that is not initialized explicitly in code */
@@ -102,7 +143,7 @@ SECTIONS {
 		*(.bss)
 		*(.bss.*)
 		*(COMMON)
-		. = 0x1000;
+		. = ALIGN(__PAGE_SIZE);
 	/*
 	 * TODO
 	 * We can define the stack and page-table here, and free them once
