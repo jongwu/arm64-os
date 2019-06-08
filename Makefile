@@ -1,3 +1,10 @@
+arch=$(uname -m)
+ifeq ($arch,"aarch64") 
+cc=gcc
+else
+cc=aarch64-linux-gnu-gcc
+endif
+
 c-device = device/pl011.c
 obj-dev = device/pl011.o
 c-fdt = fdt/fdt.c fdt/fdt_interrupts.c fdt/fdt_ro.c fdt/fdt_strerror.c fdt/fdt_wip.c fdt/fdt_addresses.c fdt/fdt_empty_tree.c fdt/fdt_overlay.c fdt/fdt_rw.c fdt/fdt_sw.c
@@ -7,25 +14,25 @@ cur_dir = $(PWD)
 asmarg = -I $(cur_dir)/include -c -D__ASSEMBLY__ -g
 carg = -I$(cur_dir)/include -c -g
 armos: $(obj) link64.lds
-	gcc $(obj) -T link64.lds -o armos
+	$(cc) $(obj) -T link64.lds -o armos
 
 %.o: %.S
-	gcc $(asmarg) $^ -o $@
+	$(cc) $(asmarg) $^ -o $@
 
 %.o: %.c
-	gcc $(carg) $^ -o $@
+	$(cc) $(carg) $^ -o $@
 
 devcie/%.o: device/%.c
-	gcc $(carg) $^ -o $@
+	$(cc) $(carg) $^ -o $@
 
 fdt/%.o: fdt/%.c
-	gcc $(carg) $^ -o $@
+	$(cc) $(carg) $^ -o $@
 
 link64.lds: link64.lds.S
-	gcc -E -P -x assembler-with-cpp -I $(cur_dir)/include -no-pie -nostdinc -nostdlib -D__ASSEMBLY__ link64.lds.S -o link64.lds
+	$(cc) -E -P -x assembler-with-cpp -I $(cur_dir)/include -no-pie -nostdinc -nostdlib -D__ASSEMBLY__ link64.lds.S -o link64.lds
 
 main.o: main.c
-	gcc $(carg) $< -o $@
+	$(cc) $(carg) $< -o $@
 
 clean:
 	rm *.o armos

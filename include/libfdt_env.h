@@ -72,7 +72,7 @@ extern "C" {
 
 typedef uint16_t FDT_BITWISE fdt16_t;
 typedef uint32_t FDT_BITWISE fdt32_t;
-//typedef uint64_t FDT_BITWISE fdt64_t;
+typedef uint64_t FDT_BITWISE fdt64_t;
 
 #define EXTRACT_BYTE(x, n)	((unsigned long long)((uint8_t *)&x)[n])
 #define CPU_TO_FDT16(x) ((EXTRACT_BYTE(x, 0) << 8) | EXTRACT_BYTE(x, 1))
