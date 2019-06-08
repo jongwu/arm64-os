@@ -1,1 +1,1 @@
-qemu-system-aarch64 -M virt -m 1024 -k armos -nographic -serial mon:stdio
+/root/qemu/aarch64-softmmu/qemu-system-aarch64 -M virt -cpu host --enable-kvm -m 1024 -kernel armos -nographic -serial mon:stdio -s -S

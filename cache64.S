@@ -70,7 +70,7 @@ ENTRY(clean_and_invalidate_dcache_range)
 	subs	x1, x1, x3
 
 	/* Check if all range has been invalidated */
-	b.hi	1b
+//	b.hi	1b
 
 	isb
 

@@ -50,7 +50,7 @@ page_table_size:
 
 .text
 ENTRY(_libkvmplat_entry)
-	/* Calculate the image size */
+	/* Calculate the image size, x15 contains the size of dtb*/
 	ldr x25, =_dtb
 	ldr x26, =_end
 	mov x15, x25
@@ -130,7 +130,7 @@ ENTRY(_libkvmplat_entry)
 
 	/* Load dtb address to x0 as a parameter */
 	ldr x0, =_dtb
-	b main
+	b _libkvmplat_start
 END(_libkvmplat_entry)
 
 ENTRY(_libkvmplat_newstack)
