@@ -81,7 +81,6 @@ SECTIONS {
 	__eh_frame_hdr_start = .;
 	.eh_frame_hdr :
 	{
-
 		*(.eh_frame_hdr)
 		*(.eh_frame_hdr.*)
 	}

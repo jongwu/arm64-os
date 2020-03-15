@@ -128,8 +128,11 @@ typedef unsigned long      __u32;
 #undef __L_IS_32
 #elif (defined __L_IS_64)
 #ifndef __HAVE_INT64__
+#ifndef LL_INT64
+#define LL_INT64
 typedef signed   long      __s64;
 typedef unsigned long      __u64;
+#endif
 #define __PRIs64 "ld"
 #define __PRIu64 "lu"
 #define __PRIx64 "lx"

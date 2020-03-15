@@ -20,7 +20,7 @@
 #define FR_TXFF                      (1 << 5)    /* Transmit FIFO/reg full */
 
 void *pl011_uart_bas;
-void *_libkvmplat_dtb;
+extern void *_libkvmplat_dtb;
 int pl011_uart_initialized = 0;
 
 #define PL011_REG(r) ((uint16_t *)(pl011_uart_bas + (r)))
@@ -50,28 +50,42 @@ static void init_pl011(void *offset)
 	pl011_uart_initialized = 1;
 }
 
-void _libkvmplat_init_console(void)
+void kvmplat_init_console(void)
 {
-        int offset, len, naddr, nsize;
+        int offset, len, naddr, nsize, check;
         const uint64_t *regs;
         uint64_t reg_uart_bas;
 
+	check = fdt_check_header(_libkvmplat_dtb);
+	if (check < 0)
+		return;
         offset = fdt_node_offset_by_compatible(_libkvmplat_dtb, \
                                         -1, "arm,pl011");
         if (offset < 0)
+	{
                 printd("No console UART found!\n");
+		return;
+	}
 
         naddr = fdt_address_cells(_libkvmplat_dtb, offset);
         if (naddr < 0 || naddr >= FDT_MAX_NCELLS)
+	{
                 printd("Could not find proper address cells!\n");
+		return;
+	}
 
         nsize = fdt_size_cells(_libkvmplat_dtb, offset);
         if (nsize < 0 || nsize >= FDT_MAX_NCELLS)
+	{
                 printd("Could not find proper size cells!\n");
+		return;
+	}
 
         regs = fdt_getprop(_libkvmplat_dtb, offset, "reg", &len);
         if (regs == NULL || (len < (int)sizeof(fdt32_t) * (naddr + nsize)))
+	{
                 printd("Bad 'reg' property");
+	}
 
         reg_uart_bas = fdt64_to_cpu(regs[0]);
 

@@ -10,8 +10,9 @@ void init_dtb(void *pdtb)
 
 void _libkvmplat_start(void *dtb_pointer)
 {
-	init_dtb(dtb_pointer);
-	_libkvmplat_init_console();
+//	init_dtb(dtb_pointer);
+	_libkvmplat_dtb = dtb_pointer;
+	kvmplat_init_console();
 	main();
 }
 

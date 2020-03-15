@@ -52,10 +52,10 @@
  *     EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stddef.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
+#include <nolib/stddef.h>
+#include <nolib/stdint.h>
+#include <nolib/stdlib.h>
+#include <nolib/string.h>
 #include <typesc.h>
 
 #ifdef __cplusplus

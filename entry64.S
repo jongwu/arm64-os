@@ -40,6 +40,7 @@
 
 .global page_table_size
 .data
+.align 3
 page_table_size:
 	.dword 0x0
 
@@ -55,6 +56,7 @@ ENTRY(_libkvmplat_entry)
 	ldr x26, =_end
 	mov x15, x25
 	sub x15, x26, x15
+	bl test
 
 	/* Round up the size to 2MB */
 	mov x17, #(IMAGE_ROUNDUP_SIZE - 1)
@@ -115,8 +117,8 @@ ENTRY(_libkvmplat_entry)
 	msr contextidr_el1, xzr
 
 	/* Save page table size for later usage */
-	ldr x26, =page_table_size
-	str x17, [x26]
+	ldr x25, =page_table_size
+	str x17, [x25]
 
 	/* Create a pagetable to do PA == VA mapping */
 	bl create_pagetables
@@ -129,6 +131,7 @@ ENTRY(_libkvmplat_entry)
 	bl start_mmu
 
 	/* Load dtb address to x0 as a parameter */
+	bl test
 	ldr x0, =_dtb
 	b _libkvmplat_start
 END(_libkvmplat_entry)
@@ -143,3 +146,7 @@ ENTRY(_libkvmplat_newstack)
 	/* Branch to _libkvmplat_entry2 */
 	br x1
 END(_libkvmplat_newstack)
+
+test:
+	nop
+	ret x30
