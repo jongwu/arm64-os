@@ -37,7 +37,7 @@
 #define RAM_BASE_ADDR 0x40000000
 
 /* Reserve first 1MB for DTB */
-#define DTB_RESERVED_SIZE 0x100000
+#define DTB_RESERVED_SIZE 0x200000
 
 OUTPUT_FORMAT("elf64-littleaarch64")
 OUTPUT_ARCH(aarch64)
@@ -56,9 +56,8 @@ SECTIONS {
 	/* Place DTB binary at the beginning of the RAM */
 	_dtb = .;
 	. = . + DTB_RESERVED_SIZE;
-
 	/* Code */
-	_text = .;
+	_text = . ;
 	.text :
 	{
 		*(.text)

@@ -4,8 +4,8 @@ ENTRY(_libkvmplat_entry)
 SECTIONS {
  . = 0x40000000;
  _dtb = .;
- . = . + 0x100000;
- _text = .;
+ . = . + 0x200000;
+ _text = . ;
  .text :
  {
   *(.text)
