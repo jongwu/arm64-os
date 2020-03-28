@@ -22,10 +22,10 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __UKARCH_TYPES_H__
+/*#ifndef __UKARCH_TYPES_H__
 #error Do not include this header directly
 #endif
-
+*/
 #ifndef __ASSEMBLY__
 
 struct __pte { unsigned long pte; };

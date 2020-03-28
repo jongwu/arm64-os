@@ -56,9 +56,9 @@ void kvmplat_init_console(void)
         const uint64_t *regs;
         uint64_t reg_uart_bas;
 
-	check = fdt_check_header(_libkvmplat_dtb);
-	if (check < 0)
-		return;
+//	check = fdt_check_header(_libkvmplat_dtb);
+//	if (check < 0)
+//		return;
         offset = fdt_node_offset_by_compatible(_libkvmplat_dtb, \
                                         -1, "arm,pl011");
         if (offset < 0)

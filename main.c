@@ -19,6 +19,8 @@ void _libkvmplat_start(void *dtb_pointer)
 int main()
 {
 	printd("armos boot up\n");
+	printd("************we are success*************\n");
+	printd("************cheers*********************\n");
 	while(1);
 	return 0;
 }
