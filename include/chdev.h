@@ -1,2 +1,8 @@
-void kvmplat_init_console(void);
-void printf(char *fmt);
+#ifndef ARMOS_STDIO
+#define ARMOS_STDIO
+extern void kvmplat_init_console(void);
+extern void printd(char *fmt);
+
+
+
+#endif

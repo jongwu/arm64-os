@@ -44,8 +44,8 @@ extern "C" {
 #define __NEED_size_t
 #include <nolib/nolibc-internal/shareddefs.h>
 
-void *memcpy(void *dst, const void *src, size_t len);
-void *memset(void *ptr, int val, size_t len);
+extern void *memcpy(void *dst, const void *src, size_t len);
+extern void *memset(void *ptr, int val, size_t len);
 void *memchr(const void *ptr, int val, size_t len);
 void *memrchr(const void *m, int c, size_t n);
 int memcmp(const void *ptr1, const void *ptr2, size_t len);
