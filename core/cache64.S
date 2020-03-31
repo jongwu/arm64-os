@@ -62,6 +62,10 @@ ENTRY(clean_and_invalidate_dcache_range)
 	bic	x0, x0, x4
 1:
 	/* clean and invalidate D cache by D cache line size */
+	/*
+	 * it's interesting, now no pagetable avaliable but
+	 * mmu maybe enabled, how clean cache by va works
+	 */
 	dc	civac, x0
 	dsb	nsh
 
@@ -70,7 +74,7 @@ ENTRY(clean_and_invalidate_dcache_range)
 	subs	x1, x1, x3
 
 	/* Check if all range has been invalidated */
-//	b.hi	1b
+	b.hi	1b
 
 	isb
 

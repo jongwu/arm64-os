@@ -2,11 +2,12 @@
 #include <asm.h>
 #include <mm.h>
 #include <cpu_defs.h>
-//#include <sections.h>
 #include <entry.h>
 
 .global page_table_size
 .data
+
+/* the address of data shoud 8 bytes align */
 .align 3
 page_table_size:
 	.dword 0x0
@@ -53,6 +54,8 @@ ENTRY(_libkvmplat_entry)
 	add x27, x26, x17
 	add x27, x27, #__STACK_SIZE
 	sub x1, x27, x25
+	/* x25 holds the start address */
+	mov x0, x25
 	bl clean_and_invalidate_dcache_range
 
 	/* Disable the MMU and D-Cache. */
@@ -70,6 +73,7 @@ ENTRY(_libkvmplat_entry)
 	 * check would be safe here.
 	 */
 1:
+	/* stp will let x26 += #16 */
 	stp xzr, xzr, [x26], #16
 	stp xzr, xzr, [x26], #16
 	stp xzr, xzr, [x26], #16
@@ -77,9 +81,14 @@ ENTRY(_libkvmplat_entry)
 	cmp x26, x27
 	b.lo 1b
 
+	/* x27 holds the top address of stack */
 	mov sp, x27
 
 	/* Set the context id */
+	/*
+	 * it's the identifer of the process, so should have given a unique value.
+	 * as there is only one process in this os, arbitary value is ok here.
+	 */
 	msr contextidr_el1, xzr
 
 	/* Save page table size for later usage */
@@ -97,7 +106,6 @@ ENTRY(_libkvmplat_entry)
 	bl start_mmu
 
 	/* Load dtb address to x0 as a parameter */
-	bl test
 	ldr x0, =_dtb
 	b _libkvmplat_start
 END(_libkvmplat_entry)
@@ -112,7 +120,3 @@ ENTRY(_libkvmplat_newstack)
 	/* Branch to _libkvmplat_entry2 */
 	br x1
 END(_libkvmplat_newstack)
-
-test:
-	nop
-	ret x30
