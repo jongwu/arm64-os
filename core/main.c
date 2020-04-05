@@ -21,6 +21,7 @@ void _libkvmplat_start(void *dtb_pointer)
 {
 	init_dtb(dtb_pointer);
 	kvmplat_init_console();
+	_dtb_init_gic(dtb_pointer);
 	main();
 }
 

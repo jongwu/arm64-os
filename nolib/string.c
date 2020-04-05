@@ -24,12 +24,7 @@
  * ----------------------------------------------------------------------
  */
 
-//#include <stdlib.h>
-//#include <stdint.h>
-//#include <string.h>
-//#include <limits.h>
 #include <errno.h>
-//#include <stdio.h>
 
 #define SIZE_MAX 2147483647U
 typedef unsigned int  uintptr_t;
@@ -39,6 +34,11 @@ typedef unsigned char uint8_t;
 typedef unsigned int size_t;
 
 unsigned long strtoul(const char *nptr, char **endptr, int base)
+{
+	return 0;
+}
+
+int snprintf(char *str, size_t size, const char *fmt, ...)
 {
 	return 0;
 }
@@ -666,8 +666,4 @@ char *strerror(int errnum)
 	static char buf[64];
 
 	return strerror_r(errnum, buf, sizeof(buf));
-}
-int snprintf(char *str, size_t size, const char *fmt, ...)
-{
-	return 0;
 }

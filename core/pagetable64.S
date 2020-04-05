@@ -79,6 +79,14 @@ ENTRY(create_pagetables)
 	mov x8, #0
 	add x9, x14, #L1_TABLE_OFFSET
 	mov x10, #2
+	/* the format of 4 levels pagetable is 
+	 *  _______________________________
+	 * |__9__|__9__|__9__|__9__|__12__|
+	 * but why? the format of the pagetable should get from some id
+	 * register. I can't find where get those info
+	 * implementation info of granul size of page can get from ID_AA64MMFR0_EL1
+	 * and can be set by TCR_EL1. maybe we should do check and set first.
+	 */
 	bl  link_l0_pagetable
 
 	/*
@@ -339,8 +347,8 @@ link_l1_pagetable:
  */
 build_l1_block_pagetable:
 	/* Find the table index */
-	lsr x11, x8, #L1_SHIFT
-	and x11, x11, #Ln_ADDR_MASK
+	lsr x11, x8, #L1_SHIFT          //L1_SHIFT is 30=12+9*2
+	and x11, x11, #Ln_ADDR_MASK	//Ln_ADDR_MASK=255, 8bit? should be 511?
 
 	/* Build the L1 block entry */
 	mov x12, x7

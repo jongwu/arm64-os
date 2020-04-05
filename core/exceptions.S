@@ -166,6 +166,14 @@ el1_sync:
 	bl trap_el1_sync
 	LEAVE_TRAP 1
 
+.align 6
+el1_irq:
+        ENTER_TRAP 1
+        msr daifclr, #(8 | 4 | 1)
+        mov x0, sp
+        bl trap_el1_irq
+        LEAVE_TRAP 1
+
 /* Bad Abort numbers */
 #define BAD_SYNC  0
 #define BAD_IRQ   1
