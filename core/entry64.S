@@ -105,6 +105,16 @@ ENTRY(_libkvmplat_entry)
 	/* Enable the mmu */
 	bl start_mmu
 
+	/* Disable advance SIMD trap by set FPEN to 11*/
+	mrs x11, cpacr_el1
+	mov x12, #0b11
+	orr x11, x11, x12, lsl #20
+	msr cpacr_el1, x11
+
+	/* Enable irq in pstate */
+	mov x12, #0
+	msr daif, x12
+
 	/* Load dtb address to x0 as a parameter */
 	ldr x0, =_dtb
 	b _libkvmplat_start
