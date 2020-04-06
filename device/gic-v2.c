@@ -35,13 +35,8 @@
 #include <nolib/string.h>
 #include <libfdt.h>
 #include <essentials.h>
-//#include <print.h>
-//#include <assert.h>
-//#include <bitops.h>
 #include <asm.h>
 #include <irq.h>
-//#include <lcpu.h>
-//#include <cpu.h>
 #include <io.h>
 #include <errno.h>
 #include <gic-v2.h>
@@ -322,8 +317,6 @@ void gic_handle_irq(void)
 		stat = gic_ack_irq();
 		irq = stat & GICC_IAR_INTID_MASK;
 
-		printf("Unikraft: EL1 IRQ#%d trap caught\n", irq);
-
 		/*
 		 * TODO: Handle IPI&SGI interrupts here
 		 */
@@ -355,10 +348,8 @@ static void gic_init_dist(void)
 
 	/* Get the maximum number of interrupts that the GIC supports */
 	irq_number = GICD_TYPER_LINE_NUM(val);
-	printf("GICv2 Max interrupt lines:%d\n", irq_number);
 	if (irq_number > GIC_MAX_IRQ)
 		irq_number = GIC_MAX_IRQ;
-	printf("GICv2 Max interrupt lines:%d\n", irq_number);
 	/*
 	 * Set all SPI interrupts targets to all CPU.
 	 */
@@ -369,8 +360,7 @@ static void gic_init_dist(void)
 	 * Set all SPI interrupts type to be level triggered
 	 */
 	for (i = GIC_SPI_BASE; i < irq_number; i += GICD_I_PER_ICFGRn)
-//		write_gicd32(GICD_ICFGR(i), GICD_ICFGR_DEF_TYPE);
-		write_gicd32(GICD_ICFGR(i), 0xffffffff);
+		write_gicd32(GICD_ICFGR(i), GICD_ICFGR_DEF_TYPE);
 
 	/*
 	 * Set all SPI priority to a default value.
@@ -379,11 +369,10 @@ static void gic_init_dist(void)
 		write_gicd32(GICD_IPRIORITYR(i), GICD_IPRIORITY_DEF);
 
 	/*
-	 * Deactivate and disable all SPIs.
+	 * Deactivate and enable all SPIs.
 	 */
 	for (i = GIC_SPI_BASE; i < irq_number; i += GICD_I_PER_ICACTIVERn) {
 		write_gicd32(GICD_ICACTIVER(i), GICD_DEF_ICACTIVERn);
-//		write_gicd32(GICD_ICENABLER(i), GICD_DEF_ICENABLERn);
 		write_gicd32(GICD_ISENABLER(i), GICD_DEF_ICENABLERn);
 	}
 
@@ -411,7 +400,6 @@ static void gic_init_cpuif(void)
 	 */
 	write_gicd32(GICD_ICACTIVER(0), GICD_DEF_ICACTIVERn);
 	write_gicd32(GICD_ISENABLER(0), GICD_DEF_PPI_ICENABLERn);
-//	write_gicd32(GICD_ICENABLER(0), GICD_DEF_PPI_ICENABLERn);
 
 	/* enable all SGIs */
 	write_gicd32(GICD_ISENABLER(0), GICD_DEF_SGI_ISENABLERn);
