@@ -322,7 +322,7 @@ void gic_handle_irq(void)
 		stat = gic_ack_irq();
 		irq = stat & GICC_IAR_INTID_MASK;
 
-		printd("Unikraft: EL1 IRQ#%d trap caught\n", irq);
+		printf("Unikraft: EL1 IRQ#%d trap caught\n", irq);
 
 		/*
 		 * TODO: Handle IPI&SGI interrupts here
@@ -351,13 +351,14 @@ static void gic_init_dist(void)
 	cpuif_number = GICD_TYPER_CPUI_NUM(val);
 	if (cpuif_number > GIC_MAX_CPUIF)
 		cpuif_number = GIC_MAX_CPUIF;
-	printd("GICv2 Max CPU interface:%d\n", cpuif_number);
+	printf("GICv2 Max CPU interface:%d\n", cpuif_number);
 
 	/* Get the maximum number of interrupts that the GIC supports */
 	irq_number = GICD_TYPER_LINE_NUM(val);
+	printf("GICv2 Max interrupt lines:%d\n", irq_number);
 	if (irq_number > GIC_MAX_IRQ)
 		irq_number = GIC_MAX_IRQ;
-	printd("GICv2 Max interrupt lines:%d\n", irq_number);
+	printf("GICv2 Max interrupt lines:%d\n", irq_number);
 	/*
 	 * Set all SPI interrupts targets to all CPU.
 	 */
@@ -368,7 +369,8 @@ static void gic_init_dist(void)
 	 * Set all SPI interrupts type to be level triggered
 	 */
 	for (i = GIC_SPI_BASE; i < irq_number; i += GICD_I_PER_ICFGRn)
-		write_gicd32(GICD_ICFGR(i), GICD_ICFGR_DEF_TYPE);
+//		write_gicd32(GICD_ICFGR(i), GICD_ICFGR_DEF_TYPE);
+		write_gicd32(GICD_ICFGR(i), 0xffffffff);
 
 	/*
 	 * Set all SPI priority to a default value.
@@ -442,9 +444,9 @@ int _dtb_init_gic(const void *fdt)
 		printd("Could not find GICv2 cpuif region!\n");
 
 	printd("Found GICv2 on:\n");
-	printd("\tDistributor  : 0x%lx - 0x%lx\n",
+	printf("\tDistributor  : 0x%lx - 0x%lx\n",
 		gic_dist_addr, gic_dist_addr + gic_dist_size - 1);
-	printd("\tCPU interface: 0x%lx - 0x%lx\n",
+	printf("\tCPU interface: 0x%lx - 0x%lx\n",
 		gic_cpuif_addr, gic_cpuif_addr + gic_cpuif_size - 1);
 
 
@@ -453,6 +455,7 @@ int _dtb_init_gic(const void *fdt)
 
 	/* Initialize GICv2 CPU interface */
 	gic_init_cpuif();
-
+	printf("generate sgi signal\n");
+	gic_sgi_gen_to_self(10);
 	return 0;
 }

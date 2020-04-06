@@ -25,6 +25,7 @@
  */
 
 #include <errno.h>
+//#include <stdio.h>
 
 #define SIZE_MAX 2147483647U
 typedef unsigned int  uintptr_t;
@@ -38,11 +39,11 @@ unsigned long strtoul(const char *nptr, char **endptr, int base)
 	return 0;
 }
 
-int snprintf(char *str, size_t size, const char *fmt, ...)
+/*int snprintf(char *str, size_t size, const char *fmt, ...)
 {
 	return 0;
 }
-
+*/
 void *memcpy(void *dst, const void *src, int len)
 {
 	int p;

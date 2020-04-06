@@ -1,8 +1,8 @@
 #ifndef __STDIO_H
 #define __STDIO_H
 
-#include <stdarg.h>
-#include <linux/compiler.h>
+#include <nolib/stdarg.h>
+#include <nolib/compiler.h>
 
 /* stdin */
 int getc(void);

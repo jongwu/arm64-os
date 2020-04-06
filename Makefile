@@ -4,10 +4,10 @@ ifeq ($arch,"aarch64")
 else
 	cc=aarch64-linux-gnu-gcc
 endif
-
+cc=gcc
 cur_dir = $(PWD)
 asmarg = -I $(cur_dir)/include -c -D__ASSEMBLY__ -g
-carg = -I$(cur_dir)/include -I$(cur_dir)/nolib/include -I$(cur_dir)/fdt/include -nostdinc -nostdlib -nolibc -nodefaultlibs -fno-builtin -fno-stack-protector  -fno-omit-frame-pointer -Wall -Wextra -c -g
+carg = -I$(cur_dir)/include -I$(cur_dir)/nolib/include -I$(cur_dir)/fdt/include -U __linux__ -nostdlib -nolibc -fno-builtin -fno-stack-protector  -fno-omit-frame-pointer -Wall -Wextra -c -g
 ldflag = -nostdinc -nostdlib -Wl,--omagic -Wl,--build-id=none -nolibc -nodefaultlibs
 
 c-device = device/pl011.c device/gic-v2.c device/fdt.c
@@ -16,7 +16,7 @@ c-fdt = fdt/fdt.c fdt/fdt_interrupts.c fdt/fdt_ro.c fdt/fdt_strerror.c fdt/fdt_w
 obj-fdt = fdt/fdt.o fdt/fdt_ro.o fdt/fdt_strerror.o fdt/fdt_wip.o fdt/fdt_addresses.o fdt/fdt_empty_tree.o fdt/fdt_overlay.o fdt/fdt_rw.o fdt/fdt_sw.o
 obj-core = core/main.o core/entry64.o core/cache64.o core/pagetable64.o core/exceptions.o core/trap.o core/lcpu.o
 obj = $(obj-core) $(obj-dev) $(obj-fdt) $(obj-nolib)
-obj-nolib = nolib/errno.o nolib/string.o
+obj-nolib = nolib/errno.o nolib/string.o nolib/stdio.o nolib/ctype.o
 
 armos: $(obj) link64.lds
 	$(cc) $(obj) $(ldflag) -T link64.lds -static -o armos

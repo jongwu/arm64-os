@@ -224,7 +224,7 @@ ENTRY(vector_table)
 
 	/* Current Exception level with SP_EL1 */
 	vector_entry el1_sync		/* Synchronous EL1h       */
-	vector_entry el1_irq_invalid	/* IRQ EL1h               */
+	vector_entry el1_irq		/* IRQ EL1h               */
 	vector_entry el1_fiq_invalid	/* FIQ EL1h               */
 	vector_entry el1_error_invalid	/* Error EL1h             */
 

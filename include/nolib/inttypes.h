@@ -37,7 +37,7 @@
 #define __INTTYPES_H__
 
 #include <stdint.h>
-#include <uk/arch/types.h>
+//#include <uk/arch/types.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -77,8 +77,8 @@ extern "C" {
 #define SCNx32 __SCNx32
 #define SCNx64 __SCNx64
 
-typedef signed   long long intmax_t;
-typedef unsigned long long uintmax_t;
+//typedef signed   long long intmax_t;
+//typedef unsigned long long uintmax_t;
 
 #ifdef __cplusplus
 }

@@ -53,7 +53,7 @@
  * Provides information about the configuration of the GIC.
  */
 #define GICD_TYPER		0x0004
-#define GICD_TYPER_LINE_NUM(r)	((((r) & 0x7) + 1) << 5)
+#define GICD_TYPER_LINE_NUM(r)	((((r) & 0x1f) + 1) << 5)
 #define GICD_TYPER_CPUI_NUM(r)	((((r) >> 5) & 0x3) + 1)
 
 /*

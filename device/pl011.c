@@ -80,6 +80,18 @@ static void init_pl011(void *offset)
 	pl011_uart_initialized = 1;
 }
 
+int ukplat_coutk(const char *buf, unsigned int len)
+{
+        for (unsigned int i = 0; i < len; i++)
+                pl011_putc(buf[i]);
+        return len;
+}
+
+int ukplat_coutd(const char *str, uint32_t len)
+{
+        return ukplat_coutk(str, len);
+}
+
 void kvmplat_init_console(void)
 {
         int offset, len, naddr, nsize, check;
